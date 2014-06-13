@@ -111,11 +111,12 @@ nodes = []
 hostgroups = []
 multi_env = node['nagios']['monitored_environments']
 multi_env_search = multi_env.empty? ? '' : ' AND (chef_environment:' + multi_env.join(' OR chef_environment:') + ')'
+nomonitor_clause = "(-nagios_nomonitor:* OR nagios_nomonitor:false)"
 
 if node['nagios']['multi_environment_monitoring']
-  nodes = search(:node, "name:*#{multi_env_search} AND -nagios_nomonitor:*")
+  nodes = search(:node, "name:*#{multi_env_search} AND #{nomonitor_clause}")
 else
-  nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment} AND -nagios_nomonitor:*")
+  nodes = search(:node, "name:* AND chef_environment:#{node.chef_environment} AND #{nomonitor_clause}")
 end
 
 if nodes.empty?
