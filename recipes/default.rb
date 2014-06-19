@@ -72,6 +72,7 @@ web_srv = node['nagios']['server']['web_server']
 case node['nagios']['server_auth_method']
 when 'openid'
   if web_srv == 'apache'
+    Chef::Log.info("Setting up Apache 2 mod_auth_opendid module")
     include_recipe 'apache2::mod_auth_openid'
   else
     Chef::Log.fatal('OpenID authentication for Nagios is not supported on NGINX')
@@ -80,6 +81,7 @@ when 'openid'
   end
 when 'cas'
   if web_srv == 'apache'
+    Chef::Log.info("Setting up Apache 2 mod_auth_cas module")
     include_recipe 'apache2::mod_auth_cas'
   else
     Chef::Log.fatal('CAS authentication for Nagios is not supported on NGINX')
@@ -88,6 +90,7 @@ when 'cas'
   end
 when 'ldap'
   if web_srv == 'apache'
+    Chef::Log.info("Setting up Apache 2 mod_authnz_ldap module")
     include_recipe 'apache2::mod_authnz_ldap'
   else
     Chef::Log.fatal('LDAP authentication for Nagios is not supported on NGINX')
@@ -95,6 +98,7 @@ when 'ldap'
     fail
   end
 else
+  Chef::Log.info("Setting up basic HTTP auth for Apache 2")
   directory node['nagios']['conf_dir']
   template "#{node['nagios']['conf_dir']}/htpasswd.users" do
     source 'htpasswd.users.erb'
