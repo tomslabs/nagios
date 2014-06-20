@@ -30,14 +30,17 @@ else
 end
 
 # configure either Apache2 or NGINX
-case node['nagios']['server']['web_server']
+Chef::Log.info('Configure web server for Nagios')
+web_srv = node['nagios']['server']['web_server']
+
+case web_srv
 when 'nginx'
-  Chef::Log.info 'Setting up Nagios server via NGINX'
+  Chef::Log.info('Setting up Nagios server via NGINX')
   include_recipe 'nagios::nginx'
   web_user = node['nginx']['user']
   web_group = node['nginx']['group'] || web_user
 when 'apache'
-  Chef::Log.info 'Setting up Nagios server via Apache2'
+  Chef::Log.info('Setting up Nagios server via Apache2')
   include_recipe 'nagios::apache'
   web_user = node['apache']['user']
   web_group = node['apache']['group'] || web_user
@@ -66,8 +69,6 @@ t users in that group exist.") if nagios_users.empty?
 
 # install nagios service either from source of package
 include_recipe "nagios::server_#{node['nagios']['server']['install_method']}"
-
-web_srv = node['nagios']['server']['web_server']
 
 case node['nagios']['server_auth_method']
 when 'openid'
