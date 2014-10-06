@@ -2,6 +2,12 @@ nagios Cookbook CHANGELOG
 =========================
 This file is used to list changes made in each version of the nagios cookbook.
 
+v5.3.6
+------
+### Bug
+- Cookbook now processes active_checks_enabled & freshness_threshold directives in service definition
+
+
 v5.3.5
 ------
 ### New Feature
